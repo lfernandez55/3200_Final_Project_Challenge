@@ -1,0 +1,53 @@
+{% extends "main/main_base.html" %} {# main/main_base.html extends layout.html #}
+{% block extra_css %}
+<style>
+  form {
+    margin: 10px 0
+  }
+</style>
+{% endblock %}
+{% block title %}{{app_name}}{% endblock %}
+
+{% block breadcrumb %}
+<li class="breadcrumb-item"><a href="{{ url_for('main.home_page') }}">Home</a> >
+  <a href="{{ url_for('admin.admin_page') }}">Admin Page</a>
+  > List Users
+</li>
+{% endblock %}
+
+{% block page_content %}
+<h1>List Users</h1>
+<div class="container">
+  <div class="row">
+    <div class="col-sm-6">
+      <form method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+        <input type="text" name="search_term">
+        <input type="submit" value="Search Users">
+      </form>
+    </div>
+    <div class="col-sm-6 text-right">
+      <a class="btn btn-default btn-primary" href="{{ url_for('admin.admin_create_user') }}">Create User</a>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <table class="table">
+        {# {% for user in users | sort( attribute = email ) %}   #}
+        {% for user in users  %}
+        <tr>
+          <td>{{user.first_name}}</td>
+          <td>{{user.last_name}}</td>
+          <td>{{user.email}}</td>
+          <td><a href="{{ url_for('admin.admin_edit_user', user_id=user.id) }}">edit</a></td>
+          <td><a href="{{ url_for('admin.admin_delete_user', user_id=user.id) }}">delete</a></td>
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}

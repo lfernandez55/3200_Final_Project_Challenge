@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ user_manager.USER_APP_NAME }}</title>
+
+    <!-- Bootstrap -->
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- In-lining styles to avoid needing a separate .css file -->
+    <style>
+        hr { border-color: #cccccc; margin: 0; }
+        .no-margins { margin: 0px; }
+        .with-margins { margin: 10px; }
+        .col-centered { float: none; margin: 0 auto; }
+        .active-link{color:white !important}
+    </style>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries x-->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7/html5shiv.js"></script>
+      <script src="//cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.js"></script>
+    <![endif]-->
+
+    {# *** Allow sub-templates to insert extra html to the head section *** #}
+    {% block extra_css %}{% endblock %}
+  </head>
+
+
+<body>
+  {% block navbar %}
+  <div class="navbar navbar-inverse" role="navigation">
+      <div class="container">
+          <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                  <span class="sr-only">Toggle navigation</span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="/">{{ user_manager.USER_APP_NAME }}</a>
+          </div>
+          <div class="navbar-collapse collapse">
+              <ul class="nav navbar-nav" >
+
+                  {% if call_or_get(current_user.is_authenticated)  %}
+                  <li>{{render('admin.admin_page',['admin'],'Admin Tools', current_user)}}</li>
+                  {% endif %}
+                  <li><a href="{{ url_for('main.member_page') }}" >User Pages</a></li>
+
+              </ul>
+
+              <ul class="nav navbar-nav" style="float:right" >
+                        {% if call_or_get(current_user.is_authenticated) %}
+                  <li><a href="{{ url_for('user.edit_user_profile') }}">{{ current_user.username or current_user.email }}</a></li><li><a href="{{ url_for('user.logout') }}">{%trans%}Sign out{%endtrans%}</a></li>
+                        {% else %}
+                  <li><a href="{{ url_for('user.login') }}">{%trans%}Sign in{%endtrans%}</a></li>
+                        {% endif %}
+                  {# Keeping this in here in case we want to use it. . .
+                  <li><a href="{{ url_for('user.register') }}">{%trans%}Register{%endtrans%}</a></li>
+                  #}
+              </ul>
+          </div>
+      </div>
+  </div>
+
+
+
+
+    {% endblock %}
+
+
+
+    {% block body %}
+    <hr class="no-margins"/>
+
+    <div id="main-div" class="with-margins">
+    <div class="container">
+      {# One-time system messages called Flash messages #}
+      {% block flash_messages %}
+          {%- with messages = get_flashed_messages(with_categories=true) -%}
+              {% if messages %}
+                  {% for category, message in messages %}
+                      {% if category=='error' %}
+                          {% set category='danger' %}
+                      {% endif %}
+                      <div class="alert alert-{{category}}">{{ message|safe }}</div>
+                  {% endfor %}
+              {% endif %}
+          {%- endwith %}
+      {% endblock %}
+    </div>
+    {% block main %}
+        {% block content %}
+          <div class="container">
+            <ol class="breadcrumb my-4">
+              {% block breadcrumb %}
+              {% endblock %}
+            </ol>
+          </div>
+          <div class="container">
+            {% block page_content %}
+            {% endblock %}
+          </div>
+        {% endblock %}
+    {% endblock %}
+    </div>
+
+    <br/>
+    <hr class="no-margins"/>
+    <div id="footer-div" class="clearfix with-margins">
+        <div class="pull-left">{{ user_manager.USER_APP_NAME }} v1.0</div>
+        <div class="pull-right">&copy;</div>
+    </div>
+    {% endblock %}
+
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+    <!-- Bootstrap -->
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+
+    <script>
+      //used to make nav link active when a particular link is clicked on
+      //or it's sub links
+      var menuLinks = document.querySelectorAll("ul.nav a");
+      for(x=0;x<menuLinks.length;x++){
+          if (window.location.href.indexOf(menuLinks[x].href) != -1){  
+              menuLinks[x].classList.add("active-link")
+          }
+      }
+  </script>
+
+    {# *** Allow sub-templates to insert extra html to the bottom of the body *** #}
+    {% block extra_js %}{% endblock %}
+
+  </body>
+</html>
+
+
+
+

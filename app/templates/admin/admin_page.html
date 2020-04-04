@@ -1,0 +1,26 @@
+{% extends "main/main_base.html" %}  {# main/main_base.html extends layout.html #}
+
+{% block title %}{{app_name}}{% endblock %}
+
+{% block breadcrumb %}
+<li class="breadcrumb-item"><a href="{{ url_for('main.home_page') }}" >Home</a> > 
+  > Admin Page
+</li>
+{% endblock %}
+
+
+{% block page_content %}
+  <h1>Admin Page</h1>
+  <a class="btn btn-default" href="{{ url_for('admin.admin_list_users') }}">Users</a>
+  <a class="btn btn-default" href="{{ url_for('admin.admin_list_roles') }}">Roles</a>
+
+  <div>
+    <h3>Links for testing roles:</h3>
+    <h6>(To thoroughly test requires admin, teacher and student roles in db )</h6>
+    <ul>
+      <li><a href="{{ url_for('admin.admin_teacher_or_admin') }}" >Requires admin OR teacher role</a></li>
+      <li><a href="{{ url_for('admin.admin_teacher_and_admin') }}" >Requires admin AND teacher role</a></li>
+      <li><a href="{{ url_for('admin.admin_student') }}" >Requires student role</a></li>
+    </ul>
+  </div>
+{% endblock %}

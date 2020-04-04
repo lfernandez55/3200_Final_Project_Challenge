@@ -1,0 +1,59 @@
+{% extends "main/main_base.html" %} {# main/main_base.html extends layout.html #}
+{% from "flask_user/_macros.html" import render_field, render_checkbox_field, render_submit_field %}
+{% block title %}{{app_name}}{% endblock %}
+
+{% block breadcrumb %}
+<li class="breadcrumb-item"><a href="{{ url_for('main.home_page') }}">Home</a> >
+    <a href="{{ url_for('admin.admin_page') }}">Admin Page</a> >
+    > {{verb}} User
+</li>
+{% endblock %}
+
+
+{% block page_content %}
+
+<div class="row">
+    <div class="col-sm-7 col-md-6 col-lg-5 col-centered">
+        <h1>{{verb}} User </h1>
+
+        <form action="" method="POST" class="form" role="form">
+            {# for csrf see https://flask-wtf.readthedocs.io/en/stable/csrf.html #}
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+            <div class="form-group">
+                <label for="role_name" class="control-label">First name:</label>
+                <input class="form-control" name="first_name" required type="text" value="{{ request.form.first_name }}">
+            </div>
+            <div class="form-group">
+                <label for="role_name" class="control-label">Last name:</label>
+                <input class="form-control" name="last_name" required type="text" value="{{ request.form.last_name  }}">
+            </div>
+            <div class="form-group">
+                <label for="role_name" class="control-label">Email:</label>
+                <input class="form-control" name="email" required type="text" value="{{ request.form.email }}">
+                <span style="color:red">{{ error_msg }}</span>
+            </div>
+            <div class="form-group">
+                <label for="role_name" class="control-label">Password:</label>
+                <input class="form-control" name="password" required type="password" value="{{ request.form.password }}">
+            </div>
+            <div class="form-group">
+                <label for="roles" class="control-label">Role:</label>
+                <select multiple class="form-control" name="roles" >
+                    {% for role in roles %}
+                        {% if role.id|string in user.role_ids %}
+                            <option selected value="{{ role.id }}">{{ role.name }}</option>
+                        {% else %}
+                            <option value="{{ role.id }}">{{ role.name }} </option>
+                        {% endif %}
+                    {% endfor %}
+
+                </select>
+            </div>
+            <input class="btn btn-default btn-primary" type="submit">
+        </form>
+    </div>
+</div>
+<br />
+
+
+{% endblock %}
