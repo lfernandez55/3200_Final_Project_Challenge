@@ -4,7 +4,7 @@ from flask_user import current_user, login_required, roles_required
 import copy
 
 from app import db
-from app.models.user_models import User, Role, Course, UsersRoles
+from app.models.user_models import User, Role, UsersRoles
 from app.forms.admin_forms import UserCustomForm
 
 admin_blueprint = Blueprint('admin', __name__, template_folder='templates')
