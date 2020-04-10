@@ -28,8 +28,6 @@ class User(db.Model, UserMixin):
     roles = db.relationship('Role', secondary='users_roles',
                             backref=db.backref('users', lazy='dynamic'))
 
-    # Define the relationship to Course via UserCourses
-    courses = db.relationship('Course', secondary='user_courses')
 
 
 # Define the Role data model
